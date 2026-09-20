@@ -1,7 +1,44 @@
 # Dataset
 
-The dataset used for this project will be documented here.
+## Dataset Name
 
-The dataset itself will not be committed to GitHub if its size or license makes that inappropriate.
+Garbage Images Dataset
 
-Dataset source, download instructions, license information, and preprocessing details will be provided here.
+## Source
+
+The dataset is available on Kaggle:
+
+https://www.kaggle.com/datasets/zlatan599/garbage-dataset-classification
+
+## Classes
+
+The dataset contains six waste categories:
+
+1. Cardboard
+2. Glass
+3. Metal
+4. Paper
+5. Plastic
+6. Trash
+
+## Dataset Structure
+
+After downloading and extracting the dataset, the directory should contain:
+
+data/
+├── cardboard/
+├── glass/
+├── metal/
+├── paper/
+├── plastic/
+└── trash/
+
+## Local Dataset Location
+
+The actual dataset images are stored locally and are not committed to GitHub.
+
+Before running the notebooks, download the dataset from the Kaggle source above and update the dataset path in the notebook if necessary.
+
+## Important
+
+The dataset images are excluded from GitHub using `.gitignore`.
