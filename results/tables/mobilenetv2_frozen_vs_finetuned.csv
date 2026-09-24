@@ -1,0 +1,5 @@
+Metric,Stage 1 (Frozen Backbone),Stage 2 (Fine-Tuned),Delta / Improvement
+Best Validation Loss,0.4209,0.3458,-0.0751 (lower is better)
+Best Validation Accuracy,85.62%,88.03%,+2.41%
+Trainable Parameters,"10,246","1,536,646","+1,526,400"
+Learning Rate,1e-3,1e-05,Reduced 100x
