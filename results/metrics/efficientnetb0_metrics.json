@@ -1,0 +1,26 @@
+{
+  "model": "EfficientNetB0",
+  "member": "Member 4",
+  "seed": 42,
+  "image_size": [
+    224,
+    224
+  ],
+  "batch_size": 32,
+  "epochs_head": 20,
+  "epochs_finetune": 10,
+  "lr_head": 0.001,
+  "lr_finetune": 1e-05,
+  "fine_tune_at_layer": -30,
+  "test_accuracy": 0.9014825442372071,
+  "macro_precision": 0.9010897497746072,
+  "macro_recall": 0.9014357789354649,
+  "macro_f1": 0.9006331188909119,
+  "weighted_precision": 0.9029783739067803,
+  "weighted_recall": 0.9014825442372071,
+  "weighted_f1": 0.9016075348075652,
+  "roc_auc_weighted": 0.9908150178414699,
+  "total_params": 4057257,
+  "trainable_params_final": 1503846,
+  "training_time_seconds": 20167.6
+}
