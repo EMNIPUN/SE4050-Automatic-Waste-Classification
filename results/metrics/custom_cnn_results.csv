@@ -1,0 +1,2 @@
+model,total_parameters,trainable_parameters,non_trainable_parameters,test_accuracy,test_precision_weighted,test_recall_weighted,test_f1_weighted,test_roc_auc_weighted,best_val_accuracy,best_val_accuracy_epoch,best_val_loss,best_val_loss_epoch,training_time_seconds,training_time_minutes,epochs_trained
+Custom CNN,424006,423046,970,0.6724055475848876,0.6797788014743297,0.6724055475848876,0.6694431905203161,0.9269569282861974,0.7119205594062805,26,0.8435419797897339,29,7099.781223773956,118.32968706289927,30
