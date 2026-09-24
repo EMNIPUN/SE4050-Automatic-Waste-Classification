@@ -1,0 +1,2 @@
+model_name,architecture_type,input_resolution,total_parameters,trainable_parameters_stage1,trainable_parameters_stage2,model_size_mb,test_accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,avg_inference_latency_ms,training_time_seconds
+MobileNetV2,Inverted Residuals + Depthwise Separable CNN,224x224x3,2427846,167302,1693702,22.78,0.9015,0.9024,0.9017,0.9009,0.9019,31.83,8188.69

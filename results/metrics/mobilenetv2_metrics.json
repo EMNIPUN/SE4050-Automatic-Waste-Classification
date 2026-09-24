@@ -1,0 +1,16 @@
+{
+    "model_name": "MobileNetV2",
+    "architecture_type": "Inverted Residuals + Depthwise Separable CNN",
+    "input_resolution": "224x224x3",
+    "total_parameters": 2427846,
+    "trainable_parameters_stage1": 167302,
+    "trainable_parameters_stage2": 1693702,
+    "model_size_mb": 22.78,
+    "test_accuracy": 0.9015,
+    "macro_precision": 0.9024,
+    "macro_recall": 0.9017,
+    "macro_f1": 0.9009,
+    "weighted_f1": 0.9019,
+    "avg_inference_latency_ms": 31.83,
+    "training_time_seconds": 8188.69
+}
