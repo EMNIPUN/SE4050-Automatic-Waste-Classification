@@ -1,0 +1,2 @@
+model,total_parameters,trainable_parameters,non_trainable_parameters,test_accuracy,test_precision_weighted,test_recall_weighted,test_f1_weighted,test_roc_auc_weighted,best_val_accuracy,best_val_accuracy_epoch,best_val_loss,best_val_loss_epoch,training_time_seconds,training_time_minutes,epochs_trained
+MobileNetV2,2270790,1536646,734144,0.8809182209469153,0.8829392833153361,0.8809182209469153,0.8812477888712229,0.9872568960399686,0.8784295320510864,18,0.3457798659801483,18,4698.45,78.31,18
