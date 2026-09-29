@@ -11,7 +11,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # Target classes
 CLASSES = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
-IMG_SIZE = (224, 224)
 
 # Base directories
 APP_DIR = Path(__file__).parent if '__file__' in globals() else Path.cwd()
@@ -46,7 +45,7 @@ else:
     print("[PENDING] Custom CNN weights not found. Using placeholder.")
 
 # 2. ResNet50
-resnet_path = find_model_path(['resnet50.keras', 'resnet50.h5', 'resnet50_waste_model.keras', 'resnet50_best.keras'])
+resnet_path = find_model_path(['resnet50.keras', 'resnet50_finetuned_best.keras', 'resnet50_waste_model.keras', 'resnet50_best.keras'])
 if resnet_path:
     try:
         loaded_models['resnet'] = tf.keras.models.load_model(resnet_path)
@@ -57,7 +56,7 @@ else:
     print("[PENDING] ResNet50 weights not found. Using placeholder.")
 
 # 3. MobileNetV2 (Our Model)
-mobilenet_path = find_model_path(['mobilenetv2.keras', 'mobilenetv2_finetuned_best.keras', 'mobilenetv2.h5'])
+mobilenet_path = find_model_path(['mobilenetv2.keras', 'mobilenetv2_finetuned_best.keras', 'mobilenetv2_waste_model.keras'])
 if mobilenet_path:
     try:
         loaded_models['mobilenet'] = tf.keras.models.load_model(mobilenet_path)
@@ -68,7 +67,7 @@ else:
     print("[WARNING] MobileNetV2 weights not found!")
 
 # 4. EfficientNetB0
-effnet_path = find_model_path(['efficientnetb0.keras', 'efficientnetb0.h5', 'efficientnet_best.keras'])
+effnet_path = find_model_path(['efficientnetb0.keras', 'efficientnetb0_final.keras', 'efficientnet_best.keras'])
 if effnet_path:
     try:
         loaded_models['effnet'] = tf.keras.models.load_model(effnet_path)
@@ -78,22 +77,53 @@ if effnet_path:
 else:
     print("[PENDING] EfficientNetB0 weights not found. Using placeholder.")
 
+# Model specifications
+SPECS = {
+    'cnn': {
+        'name': 'Custom CNN',
+        'input_size': (224, 224),
+        'test_acc': '67.24%',
+        'params': '424,006'
+    },
+    'resnet': {
+        'name': 'ResNet50',
+        'input_size': (256, 256),
+        'test_acc': '87.50%',
+        'params': '23,850,758'
+    },
+    'mobilenet': {
+        'name': 'MobileNetV2',
+        'input_size': (224, 224),
+        'test_acc': '88.09%',
+        'params': '2,270,790'
+    },
+    'effnet': {
+        'name': 'EfficientNetB0',
+        'input_size': (224, 224),
+        'test_acc': '88.20%',
+        'params': '4,057,257'
+    }
+}
+
 # Warmup pass to eliminate initial graph compilation latency
-dummy = np.zeros((1, 224, 224, 3), dtype=np.float32)
-for m in loaded_models.values():
+print("Warming up models...")
+for k, m in loaded_models.items():
     try:
+        size = SPECS[k]['input_size']
+        dummy = np.zeros((1, size[0], size[1], 3), dtype=np.float32)
         _ = m.predict(dummy, verbose=0)
     except Exception:
         pass
 
-print("Models initialized and warmed up.")
+print("Models initialized and ready.")
 print("-------------------------------------------\n")
 
 
 def preprocess_for_model(img, model_type):
-    """Preprocess a PIL image for a specific model architecture."""
-    img = img.resize(IMG_SIZE)
-    img_arr = np.array(img, dtype=np.float32)
+    """Preprocess a PIL image for a specific model architecture and input size."""
+    size = SPECS[model_type]['input_size']
+    img_resized = img.resize(size)
+    img_arr = np.array(img_resized, dtype=np.float32)
     img_batch = np.expand_dims(img_arr, axis=0)
     
     if model_type == 'cnn':
@@ -107,11 +137,12 @@ def preprocess_for_model(img, model_type):
     return img_batch
 
 
-def predict_single_model(model_key, model_name, model_type, img, specs):
-    """Runs inference on a single model or returns a placeholder."""
+def predict_single_model(model_key, img):
+    """Runs inference on a single model or returns a friendly placeholder."""
+    specs = SPECS[model_key]
     if model_key in loaded_models:
         model = loaded_models[model_key]
-        x = preprocess_for_model(img, model_type)
+        x = preprocess_for_model(img, model_key)
         
         t0 = time.perf_counter()
         probs = model.predict(x, verbose=0)[0]
@@ -157,21 +188,10 @@ def classify_all_models(input_img):
         input_img = Image.fromarray(input_img)
     input_img = input_img.convert('RGB')
     
-    # 1. Custom CNN
-    cnn_specs = {'test_acc': '67.24%', 'params': '424,006'}
-    cnn_label, cnn_info = predict_single_model('cnn', 'Custom CNN', 'cnn', input_img, cnn_specs)
-    
-    # 2. ResNet50
-    resnet_specs = {'test_acc': '~87.50%', 'params': '~25.6M'}
-    res_label, res_info = predict_single_model('resnet', 'ResNet50', 'resnet', input_img, resnet_specs)
-    
-    # 3. MobileNetV2 (Our model)
-    mob_specs = {'test_acc': '88.09%', 'params': '2,270,790'}
-    mob_label, mob_info = predict_single_model('mobilenet', 'MobileNetV2', 'mobilenet', input_img, mob_specs)
-    
-    # 4. EfficientNetB0
-    eff_specs = {'test_acc': '~88.20%', 'params': '~5.3M'}
-    eff_label, eff_info = predict_single_model('effnet', 'EfficientNetB0', 'effnet', input_img, eff_specs)
+    cnn_label, cnn_info = predict_single_model('cnn', input_img)
+    res_label, res_info = predict_single_model('resnet', input_img)
+    mob_label, mob_info = predict_single_model('mobilenet', input_img)
+    eff_label, eff_info = predict_single_model('effnet', input_img)
     
     return (
         cnn_label, cnn_info,
@@ -197,7 +217,7 @@ custom_css = """
 .model-card * { color: var(--body-text-color, inherit) !important; }
 """
 
-with gr.Blocks(title="Automated Waste Classification System") as demo:
+with gr.Blocks(title="Automated Waste Classification System", css=custom_css) as demo:
     gr.HTML("""
     <div class="header-box">
         <h2 style="font-size: 1.8rem; margin-bottom: 0.2rem; font-weight: 600;">
@@ -271,4 +291,7 @@ with gr.Blocks(title="Automated Waste Classification System") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860, share=False, css=custom_css)
+    app, local_url, share_url = demo.launch(share=True)
+    print(f"\n========================================\nLOCAL URL:  {local_url}\nPUBLIC URL: {share_url}\n========================================\n", flush=True)
+    with open("public_url.txt", "w") as f:
+        f.write(share_url or "")

@@ -4,7 +4,7 @@ emoji: ♻️
 colorFrom: green
 colorTo: blue
 sdk: gradio
-sdk_version: 6.28.0
+sdk_version: 5.20.0
 app_file: app.py
 pinned: false
 license: mit
@@ -13,7 +13,7 @@ license: mit
 # Automated Waste Classification — SE4050 Deep Learning
 
 A 4-way deep learning comparison dashboard for classifying waste imagery into 6 categories:
-cardboard, glass, metal, paper, plastic, and 	rash.
+cardboard, glass, metal, paper, plastic, and trash.
 
 ### Models Evaluated:
 1. **Custom CNN** (Built from scratch)
