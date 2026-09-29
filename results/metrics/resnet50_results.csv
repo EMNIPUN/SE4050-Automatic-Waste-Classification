@@ -1,0 +1,20 @@
+Metric,Value
+Model,ResNet50
+Total Parameters,23850758
+Trainable Parameters,15216518
+Non-trainable Parameters,8634240
+Test Accuracy,92.59%
+Precision (Weighted),92.79%
+Recall (Weighted),92.59%
+F1-score (Weighted),92.60%
+ROC-AUC (Weighted),99.48%
+Best Validation Accuracy,94.32%
+Best Accuracy Epoch,22
+Best Validation Loss,0.1844
+Best Loss Epoch,19
+Epochs Trained (Head),15
+Epochs Trained (Fine-tune),7
+Image Size,256 x 256
+Batch Size,16
+Random Seed,42
+Number of Classes,6
